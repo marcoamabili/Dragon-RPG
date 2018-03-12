@@ -27,7 +27,7 @@ namespace RPG.Characters
         [SerializeField] AnimatorOverrideController animatorOverrideController = null;
 
         // Temporarily serialized for debugging
-        [SerializeField] AbilityConfig[] abilities;
+        [SerializeField] AbilityConfig[] abilities = null;
 
         float currentHealthPoints = 0f;
         const string ATTACK_TRIGGER = "Attack";
@@ -97,7 +97,7 @@ namespace RPG.Characters
         {
             for (int abilityIndex = 0; abilityIndex < abilities.Length; abilityIndex++)
             {
-                abilities[abilityIndex].AttachComponentTo(gameObject);
+                abilities[abilityIndex].AttachAbilityTo(gameObject);
             }
         }
 
@@ -147,9 +147,10 @@ namespace RPG.Characters
             {
                 AttackTarget();
             }
-            else if (Input.GetMouseButton(1) && IsTargetInRange(enemyToSet.gameObject))
+            else if (Input.GetMouseButton(1) && IsTargetInRange(enemyToSet.gameObject)) // Power attack with right mouse
             {
                 transform.LookAt(enemy.transform);
+                anim.SetTrigger(ATTACK_TRIGGER);
                 AttemptSpecialAbility(0);
             }
 

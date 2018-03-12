@@ -885,7 +885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoints: 200
   baseDamage: 10
-  criticalHitChance: 0.569
+  criticalHitChance: 0.1
   criticalHitMultiplier: 1.25
   weaponInUse: {fileID: 11400000, guid: ecbf27d9b931a954da1b56bc7438b0c5, type: 2}
   ouchSounds:
@@ -1068,7 +1068,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -353190932
+  randomSeed: -1643320042
   InitialModule:
     serializedVersion: 3
     enabled: 1

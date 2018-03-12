@@ -27,8 +27,14 @@ namespace RPG.Characters
 
         protected AbilityBehavior behavior;
 
+        public abstract AbilityBehavior GetBehaviorComponent(GameObject objectToAttachTo);
 
-        abstract public void AttachComponentTo(GameObject gameObjecttoAttachTo);
+        public void AttachAbilityTo(GameObject objectToAttachTo)
+        {
+            AbilityBehavior behaviorComponent = GetBehaviorComponent(objectToAttachTo);
+            behaviorComponent.SetConfig(this);
+            behavior = behaviorComponent;
+        }
 
         public void Use(AbilityUseParams useParams)
         {
