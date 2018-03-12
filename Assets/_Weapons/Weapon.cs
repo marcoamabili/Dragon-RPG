@@ -13,7 +13,7 @@ namespace RPG.Weapons
         [SerializeField] AnimationClip attackAnimation;
         [SerializeField] float minTimeBetweenHits = .5f;
         [SerializeField] float maxAttackRange = 2f;
-        [SerializeField] float damageCaused = 10f;
+        [SerializeField] float additionalDamage = 10f;
 
         public GameObject GetWeaponPrefab()
         {
@@ -30,9 +30,9 @@ namespace RPG.Weapons
             return maxAttackRange;
         }
 
-        public float GetdamageCaused()
+        public float GetAdditionalDamage()
         {
-            return damageCaused;
+            return additionalDamage;
         }
 
         public AnimationClip GetAttackAnimClip()

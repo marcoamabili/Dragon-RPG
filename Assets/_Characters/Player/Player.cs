@@ -17,9 +17,13 @@ namespace RPG.Characters
 
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float baseDamage = 10f;
+        [Range(.1f, 1.0f)] [SerializeField] float criticalHitChance = .1f;
+        [SerializeField] float criticalHitMultiplier = 1.25f;
+
         [SerializeField] Weapon weaponInUse = null;
         [SerializeField] AudioClip[] ouchSounds;
         [SerializeField] AudioClip[] deathSounds;
+        [SerializeField] ParticleSystem criticalHitParticles = null;
         [SerializeField] AnimatorOverrideController animatorOverrideController = null;
 
         // Temporarily serialized for debugging
@@ -39,6 +43,7 @@ namespace RPG.Characters
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
+            
         }
 
         public float healthAsPercentage
@@ -142,6 +147,11 @@ namespace RPG.Characters
             {
                 AttackTarget();
             }
+            else if (Input.GetMouseButton(1) && IsTargetInRange(enemyToSet.gameObject))
+            {
+                transform.LookAt(enemy.transform);
+                AttemptSpecialAbility(0);
+            }
 
         }
 
@@ -171,9 +181,24 @@ namespace RPG.Characters
             {
                 transform.LookAt(enemy.transform);
                 anim.SetTrigger(ATTACK_TRIGGER);
-                //print(weaponInUse.GetAdditionalDamage());
-                enemy.TakeDamage(baseDamage);
+                enemy.TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
+            }
+        }
+
+        private float CalculateDamage()
+        {
+            bool isCriticalHit = UnityEngine.Random.value <= criticalHitChance;
+            float damageBeforeCritical = baseDamage + weaponInUse.GetAdditionalDamage();
+            if (isCriticalHit)
+            {
+                criticalHitParticles.Play();
+                return damageBeforeCritical * criticalHitMultiplier;
+                
+            }
+            else
+            {
+                return damageBeforeCritical;
             }
         }
 
@@ -200,7 +225,7 @@ namespace RPG.Characters
 
         private void ScanForAbilityKeyDown()
         {
-            for (int keyIndex = 0; keyIndex < abilities.Length; keyIndex++)
+            for (int keyIndex = 1; keyIndex < abilities.Length; keyIndex++)
             {
                 if (Input.GetKeyDown(keyIndex.ToString()))
                 {

@@ -6,42 +6,26 @@ using System;
 
 namespace RPG.Characters
 {
-    public class AreaEffectBehavior : MonoBehaviour, ISpecialAbility
+    public class AreaEffectBehavior : AbilityBehavior
     {
-        AreaEffectConfig config = null;
-        AudioSource audioSource = null;
 
-        private void Awake()
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
 
-        public void SetConfig(AreaEffectConfig configToSet)
+        public override void Use(AbilityUseParams useParams)
         {
-            this.config = configToSet;
-        }
-
-        public void Use(AbilityUseParams useParams)
-        {
-            PlaySound();
+            PlayAbilitySound();
             DealRadialDamage(useParams);
             PlayParticleEffect();
         }
 
-        private void PlaySound()
-        {
-            audioSource.clip = config.GetAudioClip();
-            audioSource.Play();
-        }
 
         private void DealRadialDamage(AbilityUseParams useParams)
         {
             // static sphere cast for targets
             RaycastHit[] hits = Physics.SphereCastAll(
                 transform.position,
-                config.GetRadius(),
+                (config as AreaEffectConfig).GetRadius(),
                 Vector3.up,
-                config.GetRadius()
+                (config as AreaEffectConfig).GetRadius()
                 );
 
             // for each hit, if damageable, deal damage to target
@@ -51,18 +35,12 @@ namespace RPG.Characters
                 bool hitPlayer = hit.collider.gameObject.GetComponent<Player>();
                 if (damageable != null && !hitPlayer)
                 {
-                    float damageToDeal = config.GetDamageToEachTarget() + useParams.baseDamage;
+                    float damageToDeal = (config as AreaEffectConfig).GetDamageToEachTarget() + useParams.baseDamage;
                     damageable.TakeDamage(damageToDeal);
                 }
             }
         }
 
-        private void PlayParticleEffect()
-        {
-            var particlePrefab = Instantiate(config.GetParticlePrefab(), transform.position, Quaternion.identity);
-            ParticleSystem myParticleSystem = particlePrefab.GetComponent<ParticleSystem>();
-            myParticleSystem.Play();
-            Destroy(particlePrefab, myParticleSystem.main.duration);
-        }
+
     }
 }
