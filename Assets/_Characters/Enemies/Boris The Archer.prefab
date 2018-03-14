@@ -355,9 +355,7 @@ GameObject:
   - component: {fileID: 95137382288446350}
   - component: {fileID: 54972925558295396}
   - component: {fileID: 136718447868056780}
-  - component: {fileID: 114196788161741460}
   - component: {fileID: 114153716182822714}
-  - component: {fileID: 114246435705367190}
   - component: {fileID: 195431522474677580}
   m_Layer: 9
   m_Name: Boris The Archer
@@ -844,37 +842,6 @@ MonoBehaviour:
   headSize: 0.5
   legsSize: 0.5
   armsLength: 0.5
---- !u!114 &114196788161741460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1926618835859420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 0.5
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 1
---- !u!114 &114246435705367190
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1926618835859420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &114252367225367192
 MonoBehaviour:
   m_ObjectHideFlags: 1

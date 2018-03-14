@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UMA;
 using UMA.CharacterSystem;
-// TODO consider rewire
 using RPG.Core;
-using RPG.Weapons;
 
 namespace RPG.Characters
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour
     {
 
         [Header("General")]
@@ -21,7 +19,6 @@ namespace RPG.Characters
         [SerializeField] float firingPeriodInSeconds = 0.5f;
         [SerializeField] float firingPeriodVariation = 0.1f;
         [SerializeField] float damagePerShot = 9f;
-        [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float deltaYNewUISocketPosition = 1f;
         [SerializeField] Vector3 verticalAimOffset = new Vector3(0, 1f, 0);
 
@@ -30,47 +27,32 @@ namespace RPG.Characters
         public float legsSize = 0.5f;
         public float armsLength = 0.5f;
 
-
-
-        float currentHealthPoints = 100f;
         bool isNewUIPositionSet = false;
         bool isAttacking = false;
 
-        AICharacterControl aiCharacterControl;
+        
         DynamicCharacterAvatar avatar;
         Dictionary<string, DnaSetter> dna;
         Player player = null;
         GameObject UISocket;
         Vector3 initialUISocketPosition;
 
-
-        public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
-
         public void TakeDamage(float damage)
         {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-            if (currentHealthPoints <= 0) { Destroy(gameObject); }
+            // todo remove
         }
-
 
         private void Start()
         {
-            currentHealthPoints = maxHealthPoints;
-            player = GameObject.FindObjectOfType<Player>();
-            aiCharacterControl = GetComponent<AICharacterControl>();
+            player = FindObjectOfType<Player>();
+            
             avatar = GetComponent<DynamicCharacterAvatar>();
             UISocket = GetComponentInChildren<EnemyUI>().gameObject;
             initialUISocketPosition = UISocket.transform.localPosition;
-
         }
 
         private void Update()
         {
-            if(player.healthAsPercentage <= Mathf.Epsilon)
-            {
-                StopAllCoroutines();
-                Destroy(this); // To stop enemy behaviour
-            }
 
             float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
 
@@ -105,7 +87,7 @@ namespace RPG.Characters
             if (distanceToPlayer <= chaseRadius)
             {
                 FreakOut(true);
-                aiCharacterControl.SetTarget(player.transform);
+                //aiCharacterControl.SetTarget(player.transform);
                 if (!isNewUIPositionSet)
                 {
                     SetNewUIPosition(new Vector3(0f, deltaYNewUISocketPosition, 0f));
@@ -115,7 +97,7 @@ namespace RPG.Characters
             }
             else
             {
-                aiCharacterControl.SetTarget(transform);
+                //aiCharacterControl.SetTarget(transform);
             }
 
         }

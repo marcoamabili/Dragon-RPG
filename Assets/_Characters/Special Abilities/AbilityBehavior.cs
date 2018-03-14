@@ -9,7 +9,7 @@ namespace RPG.Characters
         protected AbilityConfig config;
         const float PARTICLE_CLEAN_UP_DELAY = 20f;
 
-        public abstract void Use(AbilityUseParams useParams);
+        public abstract void Use(GameObject target = null);
 
 
         public void SetConfig(AbilityConfig configToSet)
@@ -25,16 +25,17 @@ namespace RPG.Characters
                 particlePrefab.transform.rotation, 
                 transform); // set world space in prefab if required
             particleObject.GetComponent<ParticleSystem>().Play();
+            StartCoroutine(DestroyParticleWhenFinished(particleObject));
             
         }
 
-        IEnumerator DestroyParticleWhenFinished(GameObject particlePrefab)
+        IEnumerator DestroyParticleWhenFinished(GameObject particleObject)
         {
-            while (particlePrefab.GetComponent<ParticleSystem>().isPlaying)
+            while (particleObject.GetComponent<ParticleSystem>().isPlaying)
             {
                 yield return new WaitForSeconds(PARTICLE_CLEAN_UP_DELAY);
             }
-            Destroy(particlePrefab);
+            Destroy(particleObject);
             yield return new WaitForEndOfFrame();
         }
 

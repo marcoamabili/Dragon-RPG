@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPG.Core; // TODO consider rewire
 
-namespace RPG.Weapons
+namespace RPG.Characters
 {
     public class Projectile : MonoBehaviour
     {
@@ -30,21 +30,23 @@ namespace RPG.Weapons
 
             if (shooter && layerCollidedWith != shooter.layer)
             {
-                DamageIfDamageable(collision);
+               // DamageIfDamageable(collision);
             }
 
             Destroy(gameObject, DESTROY_DELAY);
         }
 
-        private void DamageIfDamageable(Collision collision)
-        {
-            var damageableComponent = collision.gameObject.GetComponent(typeof(IDamageable));
+        // TODO reimplement
 
-            if (damageableComponent)
-            {
-                (damageableComponent as IDamageable).TakeDamage(damageCaused);
-            }
-        }
+        //private void DamageIfDamageable(Collision collision)
+        //{
+        //    var damageableComponent = collision.gameObject.GetComponent(typeof(IDamageable));
+
+        //    if (damageableComponent)
+        //    {
+        //        (damageableComponent as IDamageable).TakeDamage(damageCaused);
+        //    }
+        //}
 
         internal float GetDefaultLaunchSpeed()
         {

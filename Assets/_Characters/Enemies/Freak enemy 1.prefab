@@ -23,8 +23,6 @@ GameObject:
   - component: {fileID: 54521964627859240}
   - component: {fileID: 136689521288301534}
   - component: {fileID: 195994239176164068}
-  - component: {fileID: 114130319795292410}
-  - component: {fileID: 114441359508199102}
   - component: {fileID: 114543363571211958}
   - component: {fileID: 114497507757771934}
   m_Layer: 9
@@ -98,7 +96,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1668816780592736}
   m_LocalRotation: {x: -0, y: 0.16848937, z: -0, w: 0.98570347}
-  m_LocalPosition: {x: 75.89789, y: 14.008423, z: -111.31134}
+  m_LocalPosition: {x: 82.833374, y: 10.226395, z: -98.52916}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4154169392503186}
@@ -138,37 +136,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114130319795292410
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1668816780592736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 180
-  m_StationaryTurnSpeed: 180
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 0.5
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 1
---- !u!114 &114441359508199102
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1668816780592736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &114497507757771934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -303,7 +270,6 @@ MonoBehaviour:
   firingPeriodInSeconds: 2
   firingPeriodVariation: 0.1
   damagePerShot: 8
-  maxHealthPoints: 20
   deltaYNewUISocketPosition: 0.6
   verticalAimOffset: {x: 0, y: 1, z: 0}
   headSize: 1

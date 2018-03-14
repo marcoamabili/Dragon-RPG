@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPG.Weapons {
+namespace RPG.Characters {
 
     [ExecuteInEditMode]
     public class WeaponPickupPoint : MonoBehaviour
@@ -11,16 +11,22 @@ namespace RPG.Weapons {
         [SerializeField] Weapon weaponConfig;
         [SerializeField] AudioClip pickUpSfx;
 
-        // Use this for initialization
-        void Start() {
+        AudioSource audioSource;
 
+        // Use this for initialization
+        void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            DestroyChildern();
-            InstantiateWeapon();
+            if (!Application.isPlaying)
+            {
+                DestroyChildern();
+                InstantiateWeapon();
+            }
             
         }
 
@@ -37,6 +43,13 @@ namespace RPG.Weapons {
             var weapon = weaponConfig.GetWeaponPrefab();
             weapon.transform.position = Vector3.zero;
             Instantiate(weapon, gameObject.transform);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            FindObjectOfType<Player>().PutWeaponInHand(weaponConfig);
+            audioSource.PlayOneShot(pickUpSfx);
+            Destroy(gameObject, pickUpSfx.length);
         }
     }
 }

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19262e8b4a14ae42a716894fc21f57e, type: 3}
-  m_Name: Hoe
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  gripTransform: {fileID: 4430190652681392, guid: 5fa5656a8ca0c5744bd493163f7155da,
+  gripTransform: {fileID: 4678220208872474, guid: 329f024a30a82f647a9b5fc74310a370,
     type: 2}
-  weaponPrefab: {fileID: 1274797246840802, guid: cc0dbe33ee8adbe4eb124e2d95d37fe4,
+  weaponPrefab: {fileID: 1277290872445230, guid: 0982ce6c23f616d4bae4c222799510a6,
     type: 2}
-  attackAnimation: {fileID: 7400000, guid: 178c4e04ea221294a8b4befca0ba9aad, type: 3}
+  attackAnimation: {fileID: 7400000, guid: 4cc7a6346b1003244b110b3324155da7, type: 3}
   minTimeBetweenHits: 1
-  maxAttackRange: 3
-  damageCaused: 20
+  maxAttackRange: 2
+  additionalDamage: 10
