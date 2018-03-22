@@ -13,6 +13,7 @@ namespace RPG.Characters
         [SerializeField] float energyCost = 10f;
         [SerializeField] GameObject particlePrefab = null;
         [SerializeField] AudioClip[] audioClips = null;
+        [SerializeField] AnimationClip abilityAnimation = null;
 
         protected AbilityBehavior behavior;
 
@@ -44,6 +45,18 @@ namespace RPG.Characters
         {
             
             return audioClips[Random.Range(0, audioClips.Length)];
+        }
+
+        public AnimationClip GetAbilityAnimation()
+        {
+            RemoveAnimationEvents();
+            return abilityAnimation;
+        }
+
+        // So that asset packs cannot cause crashes
+        private void RemoveAnimationEvents()
+        {
+            abilityAnimation.events = new AnimationEvent[0];
         }
 
     }

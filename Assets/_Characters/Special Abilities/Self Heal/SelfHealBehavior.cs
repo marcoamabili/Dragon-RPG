@@ -6,17 +6,18 @@ namespace RPG.Characters
 {
     public class SelfHealBehavior : AbilityBehavior
     {
-        Player player = null;
+        PlayerControl player = null;
 
         private void Awake()
         {
-            player = FindObjectOfType<Player>();
+            player = FindObjectOfType<PlayerControl>();
         }
 
         public override void Use(GameObject target)
         {
             PlayParticleEffect();
             PlayAbilitySound();
+            PlayAbilityAnimation();
             var playerHealth = player.GetComponent<HealthSystem>();
             playerHealth.Heal((config as SelfHealConfig).GetExtraHealth());
         }

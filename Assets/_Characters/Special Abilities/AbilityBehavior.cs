@@ -7,6 +7,9 @@ namespace RPG.Characters
     public abstract class AbilityBehavior : MonoBehaviour
     {
         protected AbilityConfig config;
+
+        const string ATTACK_TRIGGER = "Attack";
+        const string DEFAULT_ATTACK_STATE = "DEFAULT ATTACK";
         const float PARTICLE_CLEAN_UP_DELAY = 20f;
 
         public abstract void Use(GameObject target = null);
@@ -44,6 +47,15 @@ namespace RPG.Characters
             var abilitySound = config.GetRandomAbilitySound();
             var audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(abilitySound);
+        }
+
+        protected void PlayAbilityAnimation()
+        {
+            var animatorOverrideController = GetComponent<Character>().GetOverrideController();
+            var animator = GetComponent<Animator>();
+            animatorOverrideController[DEFAULT_ATTACK_STATE] = config.GetAbilityAnimation();
+            animator.runtimeAnimatorController = animatorOverrideController;
+            animator.SetTrigger(ATTACK_TRIGGER);
         }
     }
 }

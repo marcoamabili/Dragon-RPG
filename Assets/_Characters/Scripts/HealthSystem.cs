@@ -29,15 +29,11 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
-        characterMovement = GetComponent<Character>();
-    }
-
     private void Start()
     {
+        characterMovement = GetComponent<Character>();
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         SetCurrentMaxHealth();
     }
 
@@ -82,7 +78,7 @@ public class HealthSystem : MonoBehaviour
         characterMovement.Kill();
         animator.SetTrigger(DEATH_TRIGGER);
 
-        var playerComponent = GetComponent<Player>();
+        var playerComponent = GetComponent<PlayerControl>();
         if (playerComponent && playerComponent.isActiveAndEnabled)
         {
             audioSource.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];

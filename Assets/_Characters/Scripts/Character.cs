@@ -1,7 +1,7 @@
-using RPG.CameraUI;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UMA.CharacterSystem;
 
 
 namespace RPG.Characters
@@ -37,6 +37,8 @@ namespace RPG.Characters
         [SerializeField] float agentRadius = 0.1f;
         [SerializeField] float agentHeight = 2f;
 
+        DynamicCharacterAvatar avatar;
+        Dictionary<string, DnaSetter> dna;
         NavMeshAgent navMeshAgent;
         Animator animator;
         Rigidbody myRigidbody;
@@ -47,6 +49,7 @@ namespace RPG.Characters
 
         private void Awake()
         {
+            avatar = GetComponent<DynamicCharacterAvatar>(); // for UMA characters
             AddRequiredComponents();
         }
 
@@ -82,8 +85,29 @@ namespace RPG.Characters
 
         }
 
+        public DynamicCharacterAvatar GetAvatar()
+        {
+            return avatar;
+        }
+
+        public float GetAnimSpeedMultiplier()
+        {
+            return animator.speed;
+        }
+
+        private void SetUMAAttributes()
+        {
+            // if UMA, get avatar and DNA
+            if (avatar) { dna = avatar.GetDNA(); }
+            if (dna != null && dna.Count != 0)
+            {
+                dna["breastSize"].Set(1f);
+            }
+        }
+
         private void Update()
         {
+            SetUMAAttributes();
             if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance && isAlive)
             {
                 Move(navMeshAgent.desiredVelocity);
@@ -104,6 +128,10 @@ namespace RPG.Characters
         public void Kill()
         {
             isAlive = false;
+        }
+        public AnimatorOverrideController GetOverrideController()
+        {
+            return animatorOverrideController;
         }
 
         public void SetDestination(Vector3 worldPos)
