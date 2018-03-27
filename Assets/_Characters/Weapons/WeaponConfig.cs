@@ -11,18 +11,25 @@ namespace RPG.Characters
         
         [SerializeField] GameObject weaponPrefab;
         [SerializeField] AnimationClip attackAnimation;
-        [SerializeField] float minTimeBetweenHits = .5f;
+        [SerializeField] AudioClip[] attackSounds;
+        [SerializeField] float timeBetweenAnimationCycles = .5f;
         [SerializeField] float maxAttackRange = 2f;
         [SerializeField] float additionalDamage = 10f;
+        [SerializeField] float damageDelay = 0.5f;
 
         public GameObject GetWeaponPrefab()
         {
             return weaponPrefab;
         }
 
-        public float GetMinTimeBetweenHits()
+        public float GetDamageDelay()
         {
-            return minTimeBetweenHits;
+            return damageDelay;
+        }
+
+        public float GetTimeBetweenAnimationCycles()
+        {
+            return timeBetweenAnimationCycles;
         }
 
         public float GetMaxAttackRange()
@@ -45,6 +52,11 @@ namespace RPG.Characters
         private void RemoveAnimationEvents()
         {
             attackAnimation.events = new AnimationEvent[0];
+        }
+
+        public AudioClip GetAttackSound()
+        {
+            return attackSounds[Random.Range(0, attackSounds.Length)];
         }
     }
 }

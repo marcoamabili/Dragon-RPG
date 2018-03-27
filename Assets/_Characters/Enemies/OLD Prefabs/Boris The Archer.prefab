@@ -352,9 +352,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4793836547499500}
+  - component: {fileID: 95137382288446350}
+  - component: {fileID: 54972925558295396}
+  - component: {fileID: 136718447868056780}
   - component: {fileID: 114153716182822714}
-  - component: {fileID: 114422377436189366}
-  - component: {fileID: 114470005555824196}
+  - component: {fileID: 195431522474677580}
   m_Layer: 9
   m_Name: Boris The Archer
   m_TagString: Untagged
@@ -783,6 +785,38 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1687109386028356}
   m_Mesh: {fileID: 4300002, guid: 867694a5858127940bb9ecb81fec5742, type: 3}
+--- !u!54 &54972925558295396
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1926618835859420}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!95 &95137382288446350
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1926618835859420}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 867694a5858127940bb9ecb81fec5742, type: 3}
+  m_Controller: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114153716182822714
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -795,10 +829,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseRadius: 4
-  deltaYNewUISocketPosition: 0
-  headSize: 0.5
-  legsSize: 0.5
-  armsLength: 0.5
+  chaseSpeed: 2
+  patrolPath: {fileID: 0}
+  waypointTolerance: 2
+  patrolSpeed: 0.5
+  waypointDwellTime: 2
 --- !u!114 &114252367225367192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -810,51 +845,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1946e1c1bae1c34ba2666ebb3463952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyCanvasPrefab: {fileID: 1311539807392560, guid: 9a9d70d10b9331d469e57254147e0430,
-    type: 2}
---- !u!114 &114422377436189366
-MonoBehaviour:
+--- !u!136 &136718447868056780
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1926618835859420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3218ffdb3587bf24d988ffdb9b1aebf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 0}
-  animatorOverrideController: {fileID: 0}
-  characterAvatar: {fileID: 0}
-  spatialBlend2D3D: 0.5
-  colliderCenter: {x: 0, y: 0.9268684, z: 0}
-  colliderRadius: 0.2
-  colliderHeight: 1.853737
-  movingTurnSpeed: 360
-  stationaryTurnSpeed: 180
-  moveSpeedMultiplier: 0.7
-  animationSpeedMultiplier: 1.5
-  moveThreshold: 1
-  agentSpeed: 3
-  agentAngularSpeed: 120
-  agentAcceleration: 8
-  agentStoppingDistance: 1.2
-  agentRadius: 0.1
-  agentHeight: 2
---- !u!114 &114470005555824196
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1926618835859420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aada9ff97e2d634a9a30d48e25cc62f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseDamage: 10
-  currentWeaponConfig: {fileID: 11400000, guid: 88789ce96a037ec43be28af27d4b595a,
-    type: 2}
+  m_Radius: 0.3
+  m_Height: 1.6
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!137 &137130502794184718
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -923,3 +926,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.20457616, y: -0.00029855967, z: 0.06544553}
     m_Extent: {x: 0.9941217, y: 0.88750696, z: 0.35286027}
   m_DirtyAABB: 0
+--- !u!195 &195431522474677580
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1926618835859420}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 2
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

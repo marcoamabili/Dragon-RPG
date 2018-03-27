@@ -1,113 +1,79 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UMA.CharacterSystem;
-
 
 namespace RPG.Characters
 {
     [SelectionBase]
     public class Character : MonoBehaviour
     {
-        [Header("Animator")]
-        [SerializeField] RuntimeAnimatorController runtimeAnimatorController;
+        [Header("Animator")] [SerializeField] RuntimeAnimatorController animatorController;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] Avatar characterAvatar;
+        [SerializeField] [Range(.1f,1f)] float animatorForwardCap = 1f;
 
-        [Header("Audio Source")]
-        [SerializeField] [Range(0, 1)] float spatialBlend2D3D = 0.5f;
+        [Header("Audio")]
+        [SerializeField]
+        float audioSourceSpatialBlend = 0.5f;
 
         [Header("Capsule Collider")]
-        [SerializeField] Vector3  colliderCenter = new Vector3(0f, 0.9268684f, 0f);
+        [SerializeField]
+        Vector3 colliderCenter = new Vector3(0, 1.03f, 0);
         [SerializeField] float colliderRadius = 0.2f;
-        [SerializeField] float colliderHeight = 1.853737f;
+        [SerializeField] float colliderHeight = 2.03f;
 
         [Header("Movement")]
-        [SerializeField] float movingTurnSpeed = 360;
-        [SerializeField] float stationaryTurnSpeed = 180;
-        [SerializeField] float moveSpeedMultiplier = 0.7f;
+        [SerializeField]
+        float moveSpeedMultiplier = .7f;
         [SerializeField] float animationSpeedMultiplier = 1.5f;
+        [SerializeField] float movingTurnSpeed = 180;
+        [SerializeField] float stationaryTurnSpeed = 180;
         [SerializeField] float moveThreshold = 1f;
 
-        [Header("NavMesh Agent")]
-        [SerializeField] float agentSpeed = 3f;
-        [SerializeField] float agentAngularSpeed = 120f;
-        [SerializeField] float agentAcceleration = 8f;
-        [SerializeField] float agentStoppingDistance = 1.2f;
-        [SerializeField] float agentRadius = 0.1f;
-        [SerializeField] float agentHeight = 2f;
+        [Header("Nav Mesh Agent")]
+        [SerializeField]
+        float navMeshAgentSteeringSpeed = 1.0f;
+        [SerializeField] float navMeshAgentStoppingDistance = 1.3f;
 
-        DynamicCharacterAvatar avatar;
-        Dictionary<string, DnaSetter> dna;
         NavMeshAgent navMeshAgent;
         Animator animator;
-        Rigidbody myRigidbody;
-
+        Rigidbody ridigBody;
         float turnAmount;
         float forwardAmount;
         bool isAlive = true;
+        
 
-        private void Awake()
+        void Awake()
         {
-            avatar = GetComponent<DynamicCharacterAvatar>(); // for UMA characters
             AddRequiredComponents();
         }
 
         private void AddRequiredComponents()
         {
             var capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-
             capsuleCollider.center = colliderCenter;
             capsuleCollider.radius = colliderRadius;
             capsuleCollider.height = colliderHeight;
 
-            myRigidbody = gameObject.AddComponent<Rigidbody>();
-            myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
-            navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
-            navMeshAgent.speed = agentSpeed;
-            navMeshAgent.angularSpeed = agentAngularSpeed;
-            navMeshAgent.acceleration = agentAcceleration;
-            navMeshAgent.stoppingDistance = agentStoppingDistance;
-            navMeshAgent.radius = agentRadius;
-            navMeshAgent.height = agentHeight;
-            navMeshAgent.autoBraking = false;
-            navMeshAgent.updatePosition = true;
-            navMeshAgent.updateRotation = false;
+            ridigBody = gameObject.AddComponent<Rigidbody>();
+            ridigBody.constraints = RigidbodyConstraints.FreezeRotation;
 
             var audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.spatialBlend = spatialBlend2D3D;
+            audioSource.spatialBlend = audioSourceSpatialBlend;
 
             animator = gameObject.AddComponent<Animator>();
-            animator.runtimeAnimatorController = runtimeAnimatorController;
+            animator.runtimeAnimatorController = animatorController;
             animator.avatar = characterAvatar;
-            animator.applyRootMotion = true;
 
+            navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+            navMeshAgent.speed = navMeshAgentSteeringSpeed;
+            navMeshAgent.stoppingDistance = navMeshAgentStoppingDistance;
+            navMeshAgent.autoBraking = false;
+            navMeshAgent.updateRotation = false;
+            navMeshAgent.updatePosition = true;
         }
 
-        public DynamicCharacterAvatar GetAvatar()
+        void Update()
         {
-            return avatar;
-        }
-
-        public float GetAnimSpeedMultiplier()
-        {
-            return animator.speed;
-        }
-
-        private void SetUMAAttributes()
-        {
-            // if UMA, get avatar and DNA
-            if (avatar) { dna = avatar.GetDNA(); }
-            if (dna != null && dna.Count != 0)
-            {
-                dna["breastSize"].Set(1f);
-            }
-        }
-
-        private void Update()
-        {
-            SetUMAAttributes();
             if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance && isAlive)
             {
                 Move(navMeshAgent.desiredVelocity);
@@ -118,20 +84,14 @@ namespace RPG.Characters
             }
         }
 
-        void Move(Vector3 movement)
+        public float GetAnimSpeedMultiplier()
         {
-            SetForwardAndTurn(movement);
-            ApplyExtraTurnRotation();
-            UpdateAnimator();
+            return animator.speed;
         }
 
         public void Kill()
         {
             isAlive = false;
-        }
-        public AnimatorOverrideController GetOverrideController()
-        {
-            return animatorOverrideController;
         }
 
         public void SetDestination(Vector3 worldPos)
@@ -139,26 +99,36 @@ namespace RPG.Characters
             navMeshAgent.destination = worldPos;
         }
 
-        void OnAnimatorMove()
+        public AnimatorOverrideController GetOverrideController()
         {
-            if (Time.deltaTime > 0)
-            {
-                Vector3 velocity = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
+            return animatorOverrideController;
+        }
 
-                velocity.y = myRigidbody.velocity.y;
-                myRigidbody.velocity = velocity;
-            }
+        void Move(Vector3 movement)
+        {
+            SetForwardAndTurn(movement);
+            ApplyExtraTurnRotation();
+            UpdateAnimator();
         }
 
         void SetForwardAndTurn(Vector3 movement)
         {
+            // convert the world relative moveInput vector into a local-relative
+            // turn amount and forward amount required to head in the desired direction
             if (movement.magnitude > moveThreshold)
             {
                 movement.Normalize();
             }
-            var localMovement = transform.InverseTransformDirection(movement);
-            turnAmount = Mathf.Atan2(localMovement.x, localMovement.z);
-            forwardAmount = localMovement.z;
+            var localMove = transform.InverseTransformDirection(movement);
+            turnAmount = Mathf.Atan2(localMove.x, localMove.z);
+            forwardAmount = localMove.z;
+        }
+
+        void UpdateAnimator()
+        {
+            animator.SetFloat("Forward", forwardAmount * animatorForwardCap, 0.1f, Time.deltaTime);
+            animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
+            animator.speed = animationSpeedMultiplier;
         }
 
         void ApplyExtraTurnRotation()
@@ -168,14 +138,18 @@ namespace RPG.Characters
             transform.Rotate(0, turnAmount * turnSpeed * Time.deltaTime, 0);
         }
 
-        void UpdateAnimator()
+        void OnAnimatorMove()
         {
-            animator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
-            animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
-            animator.speed = animationSpeedMultiplier;
+            // we implement this function to override the default root motion.
+            // this allows us to modify the positional speed before it's applied.
+            if (Time.deltaTime > 0)
+            {
+                Vector3 velocity = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
+
+                // we preserve the existing y part of the current velocity.
+                velocity.y = ridigBody.velocity.y;
+                ridigBody.velocity = velocity;
+            }
         }
-
-
     }
-
 }

@@ -1,40 +1,37 @@
-﻿using System.Collections;
-using UnityEngine;
-using RPG.CameraUI;
+﻿using UnityEngine;
+using System.Collections;
+using RPG.CameraUI; // for mouse events
 
 namespace RPG.Characters
 {
     public class PlayerControl : MonoBehaviour
     {
-
-       
-        EnemyAI enemy;
         Character character;
         SpecialAbilities abilities;
         WeaponSystem weaponSystem;
 
-        
-        private void Awake()
+        void Start()
         {
-            weaponSystem = GetComponent<WeaponSystem>();
             character = GetComponent<Character>();
             abilities = GetComponent<SpecialAbilities>();
-        }
+            weaponSystem = GetComponent<WeaponSystem>();
 
-
-        private void Start()
-        {
             RegisterForMouseEvents();
-
         }
 
-        private void Update()
+        private void RegisterForMouseEvents()
+        {
+            var cameraRaycaster = FindObjectOfType<CameraRaycaster>();
+            cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
+            cameraRaycaster.onMouseOverPotentiallyWalkable += OnMouseOverPotentiallyWalkable;
+        }
+
+        void Update()
         {
             ScanForAbilityKeyDown();
         }
 
-
-        private void ScanForAbilityKeyDown()
+        void ScanForAbilityKeyDown()
         {
             for (int keyIndex = 1; keyIndex < abilities.GetNumberOfAbilities(); keyIndex++)
             {
@@ -45,31 +42,23 @@ namespace RPG.Characters
             }
         }
 
-        private void RegisterForMouseEvents()
-        {
-            CameraRaycaster cameraRaycaster = FindObjectOfType<CameraRaycaster>();
-            cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
-            cameraRaycaster.onMouseOverPotentiallyWalkable += OnMouseOverPotentiallyWalkable;
-        }
-
-        private void OnMouseOverPotentiallyWalkable(Vector3 destination)
+        void OnMouseOverPotentiallyWalkable(Vector3 destination)
         {
             if (Input.GetMouseButton(0))
             {
+                weaponSystem.StopAttacking();
                 character.SetDestination(destination);
             }
         }
 
-        private bool IsTargetInRange(GameObject target)
+        bool IsTargetInRange(GameObject target)
         {
-            float distancetoTarget = (target.transform.position - transform.position).magnitude;
-            return distancetoTarget <= weaponSystem.GetCurrentWeapon().GetMaxAttackRange();
+            float distanceToTarget = (target.transform.position - transform.position).magnitude;
+            return distanceToTarget <= weaponSystem.GetCurrentWeapon().GetMaxAttackRange();
         }
-
 
         void OnMouseOverEnemy(EnemyAI enemy)
         {
-
             if (Input.GetMouseButton(0) && IsTargetInRange(enemy.gameObject))
             {
                 weaponSystem.AttackTarget(enemy.gameObject);
@@ -78,15 +67,14 @@ namespace RPG.Characters
             {
                 StartCoroutine(MoveAndAttack(enemy));
             }
-            else if (Input.GetMouseButton(1) && IsTargetInRange(enemy.gameObject)) // Power attack with right mouse
+            else if (Input.GetMouseButtonDown(1) && IsTargetInRange(enemy.gameObject))
             {
                 abilities.AttemptSpecialAbility(0, enemy.gameObject);
             }
-            else if (Input.GetMouseButton(1) && !IsTargetInRange(enemy.gameObject))
+            else if (Input.GetMouseButtonDown(1) && !IsTargetInRange(enemy.gameObject))
             {
                 StartCoroutine(MoveAndPowerAttack(enemy));
             }
-
         }
 
         IEnumerator MoveToTarget(GameObject target)
@@ -103,19 +91,12 @@ namespace RPG.Characters
         {
             yield return StartCoroutine(MoveToTarget(enemy.gameObject));
             weaponSystem.AttackTarget(enemy.gameObject);
-
         }
 
         IEnumerator MoveAndPowerAttack(EnemyAI enemy)
         {
             yield return StartCoroutine(MoveToTarget(enemy.gameObject));
             abilities.AttemptSpecialAbility(0, enemy.gameObject);
-
         }
-
-
-
-
-
     }
 }

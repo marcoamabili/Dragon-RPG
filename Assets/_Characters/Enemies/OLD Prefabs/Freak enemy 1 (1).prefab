@@ -259,19 +259,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9ee896a189f5f4fa844798ccf1df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileUsed: {fileID: 1429975572806632, guid: 36591441e953f844c9add35ae6868c70,
-    type: 2}
-  projectileSocket: {fileID: 1235410336908804}
-  attackRadius: 6
   chaseRadius: 3
-  firingPeriodInSeconds: 3
-  firingPeriodVariation: 0.1
-  damagePerShot: 8
-  deltaYNewUISocketPosition: -0.4
-  verticalAimOffset: {x: 0, y: 1, z: 0}
-  headSize: 1
-  legsSize: 0.2
-  armsLength: 0.2
+  patrolPath: {fileID: 0}
+  waypointTolerance: 2
 --- !u!136 &136856496198055320
 CapsuleCollider:
   m_ObjectHideFlags: 1

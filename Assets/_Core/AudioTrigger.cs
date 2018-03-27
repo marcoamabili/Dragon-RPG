@@ -3,16 +3,16 @@
 public class AudioTrigger : MonoBehaviour
 {
     [SerializeField] AudioClip clip;
-    [SerializeField] int layerFilter = 11;
+    [SerializeField] int layerFilter = 10;
     [SerializeField] float triggerRadius = 0f;
     [SerializeField] bool isOneTimeOnly = true;
-
     [SerializeField] bool hasPlayed = false;
     AudioSource audioSource;
 
     void Start()
     {
-        audioSource = gameObject.AddComponent<AudioSource>();
+
+        audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.clip = clip;
 
@@ -24,7 +24,7 @@ public class AudioTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == layerFilter)
+       if (other.gameObject.layer == layerFilter)
         {
             RequestPlayAudioClip();
         }

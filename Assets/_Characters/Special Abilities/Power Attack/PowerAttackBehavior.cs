@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPG.Characters
 {
@@ -7,11 +9,10 @@ namespace RPG.Characters
 
         public override void Use(GameObject target)
         {
-
             PlayAbilitySound();
-            PlayAbilityAnimation();
             DealDamage(target);
             PlayParticleEffect();
+            PlayAbilityAnimation();
         }
 
         private void DealDamage(GameObject target)

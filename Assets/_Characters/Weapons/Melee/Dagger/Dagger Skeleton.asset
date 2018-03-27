@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19262e8b4a14ae42a716894fc21f57e, type: 3}
+  m_Name: Dagger Skeleton
+  m_EditorClassIdentifier: 
+  gripTransform: {fileID: 4678220208872474, guid: 649b3c53617dd3b4087ebf91efd61b8b,
+    type: 2}
+  weaponPrefab: {fileID: 1563254570631652, guid: 10da2e1a4d41f4e49b33c51561552754,
+    type: 2}
+  attackAnimation: {fileID: 7400000, guid: 39b380f7b0a826d4bab9948086dd1ff1, type: 3}
+  attackSounds:
+  - {fileID: 8300000, guid: edfc986fa0d9cdc488ad119293a14de7, type: 3}
+  - {fileID: 8300000, guid: 18d43e22b5061aa4a81ff3c1722c37f0, type: 3}
+  - {fileID: 8300000, guid: d7191f9c81d526749b26628964f16129, type: 3}
+  - {fileID: 8300000, guid: c9daaa24e40822a40b1aa9a6fa0be836, type: 3}
+  timeBetweenAnimationCycles: 1
+  maxAttackRange: 2
+  additionalDamage: 12
+  damageDelay: 0.5
